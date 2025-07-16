@@ -1,0 +1,18 @@
+﻿## Interface: 20300
+## Title: GridStatusReadyCheck
+## Notes: Adds ready check status to Grid.
+## Notes-zhCN: [Grid] 在 Grid 添加检查就绪状态。
+## Notes-zhTW: [Grid] 在 Grid 添加檢查就緒狀態。
+## Author: Greltok, Thef
+## Version: 1.0.1
+## Grid Author: Pastamancer & Maia
+## X-Website: http://wowace.com/wiki/Grid
+## X-Category: UnitFrame
+## X-GridStatusModule: GridStatusReadyCheck
+## Dependencies: Grid
+
+GridStatusReadyCheckLocale-enUS.lua
+GridStatusReadyCheckLocale-koKR.lua
+GridStatusReadyCheckLocale-zhCN.lua
+GridStatusReadyCheckLocale-zhTW.lua
+GridStatusReadyCheck.lua
