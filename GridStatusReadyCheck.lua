@@ -1,7 +1,7 @@
 -- GridStatusReadyCheck.lua
 --
--- Created By : Greltok
--- Modified By: Thef for 2.4.3
+-- Created By: Greltok
+-- Modified By: Thef for 2.4.3 (B2B)
 
 --{{{ Libraries
 local RL = AceLibrary("Roster-2.1")
@@ -40,11 +40,6 @@ end
 function GridStatusReadyCheck:OnEnable()
     self:RegisterEvent("READY_CHECK")
     self:RegisterEvent("READY_CHECK_CONFIRM")
-    -- THIS EVENT SEEMS NOT AVAILABLE ON THIS CLIENT
-    -- instead switched to PLAYER_REGEN_DISABLED, so status will be removed when entering combat
-    --[[
-    self:RegisterEvent("READY_CHECK_FINISHED")
-    ]]
     self:RegisterEvent("PLAYER_REGEN_DISABLED")
 end
 
@@ -86,19 +81,6 @@ function GridStatusReadyCheck:READY_CHECK_CONFIRM(id, confirm)
         end
     end
 end
-
--- THIS EVENT SEEMS NOT AVAILABLE ON THIS CLIENT
--- instead switched to PLAYER_REGEN_DISABLED, so status will be removed when entering combat
---[[
-function GridStatusReadyCheck:READY_CHECK_FINISHED()
-    local settings = self.db.profile.readycheck
-    if settings.enable then
-        for unit in RL:IterateRoster(false) do
-            self.core:SendStatusLost(unit.name, "readycheck")
-        end
-    end
-end
-]]
 
 function GridStatusReadyCheck:PLAYER_REGEN_DISABLED()
     local settings = self.db.profile.readycheck
