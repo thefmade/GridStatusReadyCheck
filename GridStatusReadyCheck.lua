@@ -11,6 +11,7 @@ local AceTimer = AceLibrary("AceTimer-3.0")
 
 GridStatusReadyCheck = GridStatus:NewModule("GridStatusReadyCheck")
 GridStatusReadyCheck.menuName = L["ReadyCheck"]
+GridStatusReadyCheck.timerHandle = nil
 
 local readystatus = {
     [1] = { c = { r = 1, g = 1, b = 0, a = 1 }, t = L["?"], i = READY_CHECK_WAITING_TEXTURE },
@@ -99,9 +100,12 @@ end
 
 function GridStatusReadyCheck:StartTimer(duration)
     duration = duration or 30
-    DEFAULT_CHAT_FRAME:AddMessage('Timer started', 1,1,1)
-    AceTimer:ScheduleTimer(function()
+
+    if self.timerHandle then
+        AceTimer:CancelTimer(self.timerHandle)
+    end
+
+    self.timerHandle = AceTimer:ScheduleTimer(function()
         GridStatusReadyCheck:ResetStatus()
-        DEFAULT_CHAT_FRAME:AddMessage('Timer ended', 1,1,1)
     end, duration)
 end
