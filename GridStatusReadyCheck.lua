@@ -1,11 +1,12 @@
 -- GridStatusReadyCheck.lua
 --
 -- Created By: Greltok
--- Modified By: Thef for 2.4.3 (B2B)
+-- Modified By: Thef for 2.4.3
 
 --{{{ Libraries
 local RL = AceLibrary("Roster-2.1")
 local L = AceLibrary("AceLocale-2.2"):new("GridStatusReadyCheck")
+local AceTimer = AceLibrary("AceTimer-3.0")
 --}}}
 
 GridStatusReadyCheck = GridStatus:NewModule("GridStatusReadyCheck")
@@ -58,6 +59,7 @@ end
 function GridStatusReadyCheck:READY_CHECK(originator)
     local settings = self.db.profile.readycheck
     if settings.enable and (IsRaidLeader() or IsRaidOfficer()) then
+        self:StartTimer()
         local originatorid = RL:GetUnitIDFromName(originator)
         for unit in RL:IterateRoster(false) do
             if not UnitIsUnit(unit.unitid, originatorid) then
@@ -83,10 +85,23 @@ function GridStatusReadyCheck:READY_CHECK_CONFIRM(id, confirm)
 end
 
 function GridStatusReadyCheck:PLAYER_REGEN_DISABLED()
+    self:ResetStatus()
+end
+
+function GridStatusReadyCheck:ResetStatus()
     local settings = self.db.profile.readycheck
     if settings.enable then
         for unit in RL:IterateRoster(false) do
             self.core:SendStatusLost(unit.name, "readycheck")
         end
     end
+end
+
+function GridStatusReadyCheck:StartTimer(duration)
+    duration = duration or 30
+    DEFAULT_CHAT_FRAME:AddMessage('Timer started', 1,1,1)
+    AceTimer:ScheduleTimer(function()
+        GridStatusReadyCheck:ResetStatus()
+        DEFAULT_CHAT_FRAME:AddMessage('Timer ended', 1,1,1)
+    end, duration)
 end

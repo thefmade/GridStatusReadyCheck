@@ -1,4 +1,4 @@
-﻿## Interface: 20300
+﻿## Interface: 20400
 ## Title: GridStatusReadyCheck
 ## Notes: Adds ready check status to Grid.
 ## Notes-zhCN: [Grid] 在 Grid 添加检查就绪状态。
