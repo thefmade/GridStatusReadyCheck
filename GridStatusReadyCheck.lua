@@ -17,6 +17,7 @@ local readystatus = {
     [1] = { c = { r = 1, g = 1, b = 0, a = 1 }, t = L["?"], i = READY_CHECK_WAITING_TEXTURE },
     [2] = { c = { r = 0, g = 1, b = 0, a = 1 }, t = L["R"], i = READY_CHECK_READY_TEXTURE },
     [3] = { c = { r = 1, g = 0, b = 0, a = 1 }, t = L["X"], i = READY_CHECK_NOT_READY_TEXTURE },
+    [4] = { c = { r = 1, g = 0, b = 0, a = 1 }, t = L["A"], i = READY_CHECK_AFK_TEXTURE  },
 }
 
 --{{{ AceDB defaults
@@ -61,6 +62,7 @@ function GridStatusReadyCheck:READY_CHECK(originator)
     local settings = self.db.profile.readycheck
     if settings.enable and (IsRaidLeader() or IsRaidOfficer()) then
         self:StartTimer()
+
         local originatorid = RL:GetUnitIDFromName(originator)
         for unit in RL:IterateRoster(false) do
             if not UnitIsUnit(unit.unitid, originatorid) then
@@ -98,12 +100,17 @@ function GridStatusReadyCheck:ResetStatus()
     end
 end
 
+function GridStatusReadyCheck:ResetTimer()
+    if self.timerHandle then
+        AceTimer:CancelTimer(self.timerHandle)
+        GridStatusReadyCheck.timerHandle = nil
+    end
+end
+
 function GridStatusReadyCheck:StartTimer(duration)
     duration = duration or 30
 
-    if self.timerHandle then
-        AceTimer:CancelTimer(self.timerHandle)
-    end
+    GridStatusReadyCheck:ResetTimer()
 
     self.timerHandle = AceTimer:ScheduleTimer(function()
         GridStatusReadyCheck:ResetStatus()
